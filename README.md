@@ -1,6 +1,6 @@
 # CasinoVueJS
 
-## Ce repositories contient dans deux dossiers séparés le backend et le frontend.
+## Ce repositories contient dans deux dossiers séparés le backend (NodeJS) et le frontend (VueJS).
 
 La racine du projet, contient 2 dossier `backend` et `frontend`, pour naviguer vers ces dossiers il suffit de faire `cd`, et pour revenir en arriere il suffit de faire `cd ../`.
 
