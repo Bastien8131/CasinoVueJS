@@ -134,7 +134,11 @@ body, html{
     text-align: center;
     text-decoration: none;
     color: #000000;
+    cursor: pointer;
   }
-  
-  /*# sourceMappingURL=style.css.map */
-  
+  .btn-sidebar:hover {
+    transition: 0.2s;
+    background-color: #583B33;
+    color: #ffffff;
+    border: 2px solid #ffffff;
+  }

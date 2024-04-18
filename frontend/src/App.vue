@@ -18,11 +18,11 @@ const changeContent = (newContent) => {
 <template>
   <div class="bg-overflow"></div>
     <div class="menu">
-      <a @click="changeContent('accueil')" class="btn-sidebar">Accueil</a>
-      <a @click="changeContent('connexion')" class="btn-sidebar">Connexion</a>
-      <a @click="changeContent('roulette')" class="btn-sidebar">Roulette</a>
-      <a @click="changeContent('blackjack')" class="btn-sidebar">BlackJack</a>
-      <a @click="changeContent('machineSous')" class="btn-sidebar">Machine à sous</a>
+      <a @click="changeContent('accueil')" class="btn-sidebar" id="accueil">Accueil</a>
+      <a @click="changeContent('connexion')" class="btn-sidebar" id="connexion">Connexion</a>
+      <a @click="changeContent('roulette')" class="btn-sidebar" id="roulette">Roulette</a>
+      <a @click="changeContent('blackjack')" class="btn-sidebar" id="blackjack">BlackJack</a>
+      <a @click="changeContent('machineSous')" class="btn-sidebar" id="machineSous">Machine à sous</a>
   </div>
   <div class="menu__toggler"><span></span></div>
   <component class="main-content" :is="content">
