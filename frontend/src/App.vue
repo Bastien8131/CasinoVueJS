@@ -26,7 +26,7 @@ const changeContent = (newContent) => {
       <a @click="changeContent('blackjack')" class="btn-sidebar" id="blackjack">BlackJack</a>
       <a @click="changeContent('machineSous')" class="btn-sidebar" id="machineSous">Machine à sous</a>
   </div>
-  <div class="menu__toggler" v-if="content !== 'connexion' && content !== 'inscription'"><span></span></div>
+  <div class="menu__toggler" v-if="content !== 'connexion'"><span></span></div>
   <component class="main-content" :is="content">
     <accueil v-if="content === 'accueil'"></accueil>
     <machineSous v-if="content === 'machineSous'"></machineSous>
