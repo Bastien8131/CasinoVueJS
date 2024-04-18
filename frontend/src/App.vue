@@ -17,13 +17,14 @@ const changeContent = (newContent) => {
 
 <template>
   <div class="bg-overflow"></div>
-  <ul>
-    <li @click="changeContent('accueil')" >Home</li>
-    <li @click="changeContent('machineSous')" >Machine à sous</li>
-    <li @click="changeContent('connexion')" >Connexion</li>
-    <li @click="changeContent('roulette')" >Roulette</li>
-    <li @click="changeContent('blackjack')" >BlackJack</li>
-  </ul>
+    <div class="menu">
+      <a @click="changeContent('accueil')" class="btn-sidebar">Accueil</a>
+      <a @click="changeContent('connexion')" class="btn-sidebar">Connexion</a>
+      <a @click="changeContent('roulette')" class="btn-sidebar">Roulette</a>
+      <a @click="changeContent('blackjack')" class="btn-sidebar">BlackJack</a>
+      <a @click="changeContent('machineSous')" class="btn-sidebar">Machine à sous</a>
+  </div>
+  <div class="menu__toggler"><span></span></div>
   <component class="main-content" :is="content">
     <accueil v-if="content === 'accueil'"></accueil>
     <machineSous v-if="content === 'machineSous'"></machineSous>
@@ -33,7 +34,6 @@ const changeContent = (newContent) => {
   </component>
   <div class="hud-value">
     <div class="content">
-      <div class="btn-burger"></div>
       <div class="acheter-crd">
         <button onclick="addCredits()">Acheter Credits</button>
       </div>
