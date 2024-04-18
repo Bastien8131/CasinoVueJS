@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import MachineSous from "@/components/machineSous/machineSous.vue";
 import Connexion from "@/components/connexion/connexion.vue";
+import Inscription from "@/components/inscription/inscription.vue";
 import Roulette from "@/components/roulette/roulette.vue";
 import Blackjack from "@/components/blackjack/blackjack.vue";
 import Accueil from "@/components/accueil/accueil.vue";
@@ -20,19 +21,21 @@ const changeContent = (newContent) => {
     <div class="menu">
       <a @click="changeContent('accueil')" class="btn-sidebar">Accueil</a>
       <a @click="changeContent('connexion')" class="btn-sidebar">Connexion</a>
+      <a @click="changeContent('inscription')" class="btn-sidebar">Inscription</a>
       <a @click="changeContent('roulette')" class="btn-sidebar">Roulette</a>
       <a @click="changeContent('blackjack')" class="btn-sidebar">BlackJack</a>
       <a @click="changeContent('machineSous')" class="btn-sidebar">Machine à sous</a>
   </div>
-  <div class="menu__toggler"><span></span></div>
+  <div class="menu__toggler" v-if="content !== 'connexion' && content !== 'inscription'"><span></span></div>
   <component class="main-content" :is="content">
     <accueil v-if="content === 'accueil'"></accueil>
     <machineSous v-if="content === 'machineSous'"></machineSous>
     <connexion v-if="content === 'connexion'"></connexion>
+    <inscription v-if="content === 'inscription'"></inscription>
     <roulette v-if="content === 'roulette'"></roulette>
     <blackjack v-if="content === 'blackjack'"></blackjack>
   </component>
-  <div class="hud-value">
+  <div class="hud-value" v-if="content !== 'connexion' && content !== 'inscription'">
     <div class="content">
       <div class="acheter-crd">
         <button onclick="addCredits()">Acheter Credits</button>

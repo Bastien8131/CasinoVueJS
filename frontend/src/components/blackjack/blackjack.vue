@@ -191,7 +191,7 @@
                 boutonTirer.style.display = 'none';
                 boutonRester.style.display = 'none';
                 boutonDonner.style.display = 'inline-block';
-                boutonsJetons.forEach(bouton => bouton.style.display = 'inline-block');
+                boutonsJetons.forEach(bouton => bouton.style.display = 'inline');
             }
         }
 
