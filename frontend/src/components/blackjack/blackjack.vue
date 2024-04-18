@@ -121,7 +121,6 @@
                     imageCarte.src = 'src/assets/img/Blackjack/dos_carte.png';
                     imageCarte.alt = "Dos de la carte";
                 } else {
-                    // Utilisation de require pour importer dynamiquement l'image
                     imageCarte.src = `src/assets/img/Blackjack/cartes/${carte.valeur}_de_${carte.type}.jpg`;
                     imageCarte.alt = `${carte.valeur} de ${carte.type}`;
                 }
@@ -174,6 +173,7 @@
             const boutonTirer = document.getElementById('tirer-btn');
             const boutonRester = document.getElementById('rester-btn');
             const boutonDonner = document.getElementById('donner-btn');
+            const boutonsJetons = document.querySelectorAll('.bouton-jeton');
 
             boutonDoubler.disabled = !activer;
             boutonTirer.disabled = !activer;
@@ -185,11 +185,13 @@
                 boutonTirer.style.display = 'inline-block';
                 boutonRester.style.display = 'inline-block';
                 boutonDonner.style.display = 'none';
+                boutonsJetons.forEach(bouton => bouton.style.display = 'none');
             } else {
                 boutonDoubler.style.display = 'none';
                 boutonTirer.style.display = 'none';
                 boutonRester.style.display = 'none';
                 boutonDonner.style.display = 'inline-block';
+                boutonsJetons.forEach(bouton => bouton.style.display = 'inline-block');
             }
         }
 
@@ -207,7 +209,7 @@
             } else if (credits.value < mise.value) {
                 alert("Vous n'avez pas assez de crédits pour doubler votre mise.");
             } else {
-                alert("Vous ne pouvez doubler que si vous avez exactement deux cartes.");
+                alert("Vous ne pouvez doubler que si vous avez seulement deux cartes.");
             }
         });
 
