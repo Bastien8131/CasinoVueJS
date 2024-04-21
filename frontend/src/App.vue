@@ -5,6 +5,7 @@ import Connexion from "@/components/connexion/connexion.vue";
 import Inscription from "@/components/inscription/inscription.vue";
 import Roulette from "@/components/roulette/roulette.vue";
 import Blackjack from "@/components/blackjack/blackjack.vue";
+import FootballStudio from "@/components/FootballStudio/FootballStudio.vue";
 import Accueil from "@/components/accueil/accueil.vue";
 
 const content = ref('accueil')
@@ -25,6 +26,7 @@ const changeContent = (newContent) => {
       <a @click="changeContent('roulette')" class="btn-sidebar" id="roulette">Roulette</a>
       <a @click="changeContent('blackjack')" class="btn-sidebar" id="blackjack">BlackJack</a>
       <a @click="changeContent('machineSous')" class="btn-sidebar" id="machineSous">Machine à sous</a>
+      <a @click="changeContent('FootballStudio')" class="btn-sidebar" id="FootballStudio">Football Studio</a>
   </div>
   <div class="menu__toggler" v-if="content !== 'connexion'"><span></span></div>
   <component class="main-content" :is="content">
@@ -34,6 +36,7 @@ const changeContent = (newContent) => {
     <inscription v-if="content === 'inscription'"></inscription>
     <roulette v-if="content === 'roulette'"></roulette>
     <blackjack v-if="content === 'blackjack'"></blackjack>
+    <FootballStudio v-if="content === 'FootballStudio'"></FootballStudio>
   </component>
   <div class="hud-value" v-if="content !== 'connexion' && content !== 'inscription'">
     <div class="content">

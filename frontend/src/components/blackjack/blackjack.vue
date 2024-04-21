@@ -121,7 +121,7 @@
                     imageCarte.src = 'src/assets/img/Blackjack/dos_carte.png';
                     imageCarte.alt = "Dos de la carte";
                 } else {
-                    imageCarte.src = `src/assets/img/Blackjack/cartes/${carte.valeur}_de_${carte.type}.jpg`;
+                    imageCarte.src = `src/assets/img/Cartes/${carte.valeur}_de_${carte.type}.jpg`;
                     imageCarte.alt = `${carte.valeur} de ${carte.type}`;
                 }
                 elementCarte.appendChild(imageCarte);
@@ -139,7 +139,7 @@
                 const carteCacheeElement = cartesExistantes[1];
                 const imageCarteCachee = carteCacheeElement.querySelector('img');
                 const carte = main[1];
-                imageCarteCachee.src = `src/assets/img/Blackjack/cartes/${carte.valeur}_de_${carte.type}.jpg`;
+                imageCarteCachee.src = `src/assets/img/Cartes/${carte.valeur}_de_${carte.type}.jpg`;
                 imageCarteCachee.alt = `${carte.valeur} de ${carte.type}`;
             }
         }
