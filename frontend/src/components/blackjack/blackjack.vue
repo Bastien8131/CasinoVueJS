@@ -33,11 +33,15 @@
 
 <script setup>
     import { onMounted, ref } from 'vue';
+    import {useUserStore} from "@/stores/user";
+
+    const userStore = useUserStore();
 
     let mainJoueur = ref([]);
     let mainCroupier = ref([]);
     let cartes = ref([]);
     let credits = ref(10000);
+    // let credits = ref(userStore.getCredit);
     let mise = ref(0);
 
     onMounted(() => {

@@ -1,4 +1,23 @@
 <script setup>
+import {useUserStore} from "@/stores/user";
+import {ref} from "vue";
+
+const userStore = useUserStore();
+const emit = defineEmits(['inFocus', 'submit'])
+
+let pseudo = ref('usertest');
+let email = ref('usertest@u.com');
+
+const submit = async () => {
+  try {
+    const response = await userStore.login(pseudo.value, email.value);
+    console.log('Login successful:', response);
+    console.log('User credit:', userStore.getEmail);
+    emit('changeContent', 'accueil');
+  } catch (error) {
+    console.error('Login failed:', error.message);
+  }
+}
 
 </script>
 
@@ -12,14 +31,14 @@
 			<form>
 			<div class="mb-3">
 				<label for="email" class="form-label text-light">E-mail</label>
-				<input type="email" class="form-control" id="email" placeholder="Entrez votre email" required>
+				<input type="email" class="form-control" id="email" placeholder="Entrez votre email" required v-model="email">
 			</div>
 			<div class="mb-5">
-				<label for="password" class="form-label text-light">Mot de passe</label>
-				<input type="password" class="form-control" id="password" placeholder="Entrez votre mot de passe" required>
+				<label for="pseudo" class="form-label text-light">Pseudo</label>
+				<input type="pseudo" class="form-control" id="pseudo" placeholder="Entrez votre pseudo" required v-model="pseudo">
 			</div>
 			<div class="d-grid gap-2">
-				<button type="submit" class="btn btn-primary">SE CONNECTER</button>
+				<button type="button" class="btn btn-primary" @click="submit()">SE CONNECTER</button>
 				<button type="button" class="btn btn-secondary">CRÉER UN COMPTE</button>
 			</div>
 			<div class="text-center mt-3">

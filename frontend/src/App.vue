@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 import MachineSous from "@/components/machineSous/machineSous.vue";
 import Connexion from "@/components/connexion/connexion.vue";
 import Inscription from "@/components/inscription/inscription.vue";
@@ -7,13 +7,26 @@ import Roulette from "@/components/roulette/roulette.vue";
 import Blackjack from "@/components/blackjack/blackjack.vue";
 import FootballStudio from "@/components/FootballStudio/FootballStudio.vue";
 import Accueil from "@/components/accueil/accueil.vue";
+import {useUserStore} from "@/stores/user";
 
-const content = ref('accueil')
+const userStore = useUserStore();
+const content = ref('connexion');
 
 const changeContent = (newContent) => {
   content.value = newContent
 }
 
+const addCredits = () => {
+  userStore.setCredit(userStore.getCredit + 1000)
+  content.value = 'blackjack'
+}
+
+//listen userStore credit
+// onMounted(() => {
+//   setInterval(() => {
+//     console.log(userStore.getCredit)
+//   }, 1000)
+// })
 
 </script>
 
@@ -32,7 +45,7 @@ const changeContent = (newContent) => {
   <component class="main-content" :is="content">
     <accueil v-if="content === 'accueil'"></accueil>
     <machineSous v-if="content === 'machineSous'"></machineSous>
-    <connexion v-if="content === 'connexion'"></connexion>
+    <connexion v-if="content === 'connexion'" @changeContent="changeContent"></connexion>
     <inscription v-if="content === 'inscription'"></inscription>
     <roulette v-if="content === 'roulette'"></roulette>
     <blackjack v-if="content === 'blackjack'"></blackjack>
@@ -41,11 +54,11 @@ const changeContent = (newContent) => {
   <div class="hud-value" v-if="content !== 'connexion' && content !== 'inscription'">
     <div class="content">
       <div class="acheter-crd">
-        <button onclick="addCredits()">Acheter Credits</button>
+        <button @click="addCredits">Acheter Credits</button>
       </div>
       <div class="credits">
         <div class="logo"></div>
-        <p id="credits-value">0</p>
+        <p id="credits-value">{{userStore.getCredit}}</p>
       </div>
     </div>
   </div>
