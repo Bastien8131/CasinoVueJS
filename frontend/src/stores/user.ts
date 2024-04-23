@@ -6,14 +6,16 @@ const API_URL = 'http://localhost:5170'
 export const useUserStore = defineStore('user',{
   state: () => ({
     id: 0,
+    socketId: '',
     pseudo: '',
     email: '',
     credit: 0,
     score: 0
   }),
   actions: {
-    setUserData(id: number, pseudo: string, email: string, credit: number, score: number) {
+    setUserData(id: number, socketId: string, pseudo: string, email: string, credit: number, score: number) {
       this.id = id
+      this.socketId = socketId
       this.pseudo = pseudo
       this.email = email
       this.credit = credit
@@ -21,6 +23,9 @@ export const useUserStore = defineStore('user',{
     },
     setId(id: number) {
       this.id = id
+    },
+    setSocketId(socketId: string) {
+      this.socketId = socketId
     },
     setPseudo(pseudo: string) {
       this.pseudo = pseudo
@@ -30,9 +35,20 @@ export const useUserStore = defineStore('user',{
     },
     setCredit(credit: number) {
       this.credit = credit
-      // const socket = this.$socket;
-      //
-      // socket.emit('update', {id: this.id, credit: this.credit}, response => {
+      const socket = this.$socket;
+
+      socket.emit('update', {
+        id: this.id,
+        socketId: this.socketId,
+        credit: this.credit,
+        score: this.score
+      })
+
+
+      // socket.emit('update', {
+      //   id: this.id,
+      //   credit: this.credit
+      // }, response => {
       //   if(response.message == 'success') {
       //     console.log('credit updated')
       //   } else {
@@ -52,6 +68,7 @@ export const useUserStore = defineStore('user',{
           if (response.message == 'success') {
             this.setUserData(
               response.value._id,
+              response.value._socketId,
               response.value._pseudo,
               response.value._email,
               response.value._credit,
@@ -78,6 +95,7 @@ export const useUserStore = defineStore('user',{
     getUserData() {
       return {
         id: this.id,
+        socketId: this.socketId,
         pseudo: this.pseudo,
         email: this.email,
         credit: this.credit,
@@ -86,6 +104,9 @@ export const useUserStore = defineStore('user',{
     },
     getId() {
       return this.id
+    },
+    getSocketId() {
+      return this.socketId
     },
     getPseudo() {
       return this.pseudo

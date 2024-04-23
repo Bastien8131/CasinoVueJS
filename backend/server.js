@@ -30,16 +30,18 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('User disconnected');
-        usersLoggued = usersLoggued.filter(u => u.socketId !== socket.id);
-        // co.query('UPDATE data SET credit = ?, score = ? WHERE idU = ?', [user.credit, user.score, user.id], (err, result) => {
-        //     if (err) {
-        //         res.send('error');
-        //         return;
-        //     }
-        //
-        // });
+        let user = usersLoggued.find(u => u.socketId === socket.id);
+        if(user){
+            co.query('UPDATE data SET credit = ?, score = ? WHERE idU = ?', [user.credit, user.score, user.id], (err, result) => {
+                if (err) {
+                    res.send('error logout update');
+                    console.error('error logout update');
+                    return;
+                }
+            });
+            usersLoggued.splice(usersLoggued.indexOf(user), 1);
+        }
     });
-
 
     socket.on('login', (data, callback) => {
         let pseudo = data.pseudo;
@@ -80,17 +82,17 @@ io.on('connection', (socket) => {
 
     });
 
-    socket.on('update', (data, callback) => {
+    socket.on('update', (data) => {
         let id = data.id;
         let credit = data.credit;
         let score = data.score;
         let user = usersLoggued.find(u => u.socketId === socket.id && u.id === id);
+        usersLoggued.splice(usersLoggued.indexOf(user), 1);
         user.credit = credit;
         user.score = score;
-        usersLoggued.splice(usersLoggued.indexOf(user), 1);
         usersLoggued.push(user);
 
-        callback('success');
+        console.log(usersLoggued);
     });
 
     socket.on('test', () => {
