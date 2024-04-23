@@ -19,7 +19,6 @@ const changeContent = (newContent) => {
 
 const addCredits = () => {
   userStore.setCredit(userStore.getCredit + 1000)
-  content.value = 'blackjack'
 }
 
 sidebarLinks.forEach(link => {
@@ -50,7 +49,7 @@ const showBurger = () => {
       <a @click="changeContent('FootballStudio')" class="btn-sidebar" id="FootballStudio">Football Studio</a>
   </div>
   <component class="main-content" :is="content">
-    <accueil v-if="content === 'accueil'"></accueil>
+    <accueil v-if="content === 'accueil'" @changeContent="changeContent"></accueil>
     <machineSous v-if="content === 'machineSous'"></machineSous>
     <connexion v-if="content === 'connexion'" @changeContent="changeContent"></connexion>
     <inscription v-if="content === 'inscription'"></inscription>
