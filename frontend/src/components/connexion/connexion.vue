@@ -5,6 +5,7 @@ import {ref} from "vue";
 const userStore = useUserStore();
 const emit = defineEmits(['inFocus', 'submit'])
 
+let errorMessage = ref('');
 let pseudo = ref('usertest');
 let email = ref('usertest@u.com');
 
@@ -14,10 +15,13 @@ const submit = async () => {
     console.log('Login successful:', response);
     console.log('User credit:', userStore.getEmail);
     emit('changeContent', 'accueil');
+    errorMessage.value = '';  // Clear any previous error messages
   } catch (error) {
     console.error('Login failed:', error.message);
+    errorMessage.value = error.message || 'Une erreur est survenue lors de la connexion.';
   }
 }
+
 
 </script>
 
@@ -28,6 +32,9 @@ const submit = async () => {
 	<div class="centre">
 		<div class="container">
 			<h2 class="text-center text-light mb-4">Connexion</h2>
+      <div v-if="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
 			<form>
 			<div class="mb-3">
 				<label for="email" class="form-label text-light">E-mail</label>
