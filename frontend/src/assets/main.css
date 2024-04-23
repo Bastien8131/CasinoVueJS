@@ -10,6 +10,19 @@ body, html{
 /*}*/
 
 
+/* PARTIE FOOTBALL STUDIO */
+.carteFootball {
+  display:inline-block;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  margin-right: -23%;
+}
+.carteFootball img {
+  position: relative;
+  width: 30%;
+  height: auto;
+  border-radius: 10%;
+}
+
 
 /* PARTIE BLACKJACK - Code à ne pas deplacer */
 .carte {

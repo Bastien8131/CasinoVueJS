@@ -1,4 +1,7 @@
 <template>
+	<img src="@/assets/img/ballons.svg" alt="" class="ballons-img">
+    <img src="@/assets/img/pauvre.svg" alt="" class="pauvre-img">
+
 	<div class="football-container">
 		<div class="col-md-12">
 			<div class="main-croupier">
@@ -32,6 +35,24 @@
 </template>
 
 <style scoped>
+    @keyframes monter {
+        0% { transform: translateY(100vh); }
+        100% { transform: translateY(-200vh); }
+    }
+    .ballons-img{
+        position: absolute;
+        display: none;
+        z-index: 9999;
+        transform: translateX(0);
+        animation: monter 10s linear forwards;
+    }
+    .pauvre-img{
+        position: absolute;
+        display: none;
+        z-index: 9999;
+        transform: translateX(0);
+        animation: monter 10s linear forwards;
+    }
 	.football-container {
 		background-image: url("@/assets/img/FootballStudio/table.png");
 		background-size: cover;
@@ -114,8 +135,8 @@
 <script setup>
 	import { onMounted, ref } from 'vue';
 
-	let CarteLocaux = ref([]);
-	let CarteVisiteurs = ref([]);
+	let CarteJoueurs = ref([]);
+	let CarteBanque = ref([]);
 	let cartes = ref([]);
 	let credits = ref(10000);
 	let mise = ref(0);
@@ -141,29 +162,47 @@
 
 
 		// Fonction pour activer/désactiver les boutons de jeu
-		function activerBoutonsJeu(activer) {
+		function activerBoutonsJeu(mode) {
 			const boutonLocaux = document.querySelector('.locaux');
 			const boutonEgalite = document.querySelector('.egalite');
 			const boutonVisiteurs = document.querySelector('.visiteurs');
 			const boutonsJetons = document.querySelectorAll('.bouton-jeton');
 			const boutonChoix = document.querySelector('.choix-img');
+			const ballons = document.querySelector('.ballons-img');
+            const pauvre = document.querySelector('.pauvre-img');
 
-			boutonLocaux.disabled = activer;
-			boutonEgalite.disabled = activer;
-			boutonVisiteurs.disabled = activer;
 
-			if (!activer) {
-				boutonLocaux.style.display = 'none';
-				boutonEgalite.style.display = 'none';
-				boutonVisiteurs.style.display = 'none';
-				boutonChoix.style.display = 'none';
-				boutonsJetons.forEach(bouton => bouton.style.display = 'none');
-			} else {        
-				boutonLocaux.style.display = 'inline-block';
-				boutonEgalite.style.display = 'inline-block';
-				boutonVisiteurs.style.display = 'inline-block';
-				boutonChoix.style.display = 'inline-block';
-				boutonsJetons.forEach(bouton => bouton.style.display = 'inline');
+			switch (mode) {
+                case 'initial':
+                    // Affichage initial des éléments
+					boutonLocaux.style.display = 'inline-block';
+					boutonEgalite.style.display = 'inline-block';
+					boutonVisiteurs.style.display = 'inline-block';
+					boutonChoix.style.display = 'inline-block';
+					boutonsJetons.forEach(bouton => bouton.style.display = 'inline');
+                    ballons.style.display = 'none';
+                    pauvre.style.display = 'none';
+                    break;
+				case 'jeu':
+                    // Affichage pendant le jeu
+					boutonLocaux.style.display = 'none';
+					boutonEgalite.style.display = 'none';
+					boutonVisiteurs.style.display = 'none';
+					boutonChoix.style.display = 'none';
+					boutonsJetons.forEach(bouton => bouton.style.display = 'none');
+                    ballons.style.display = 'none';
+                    pauvre.style.display = 'none';
+                    break;
+				case 'gagné':
+                    // Affichage lorsque le joueur gagne
+                    ballons.style.display = 'block';
+                    pauvre.style.display = 'none';
+                    break;
+                case 'perdu':
+                    // Affichage lorsque le joueur perd
+                    ballons.style.display = 'none';
+                    pauvre.style.display = 'block';
+                    break;
 			}
 		}
 
@@ -196,87 +235,116 @@
 		// Fonction pour distribuer les cartes
 		function distribuerCartes() {
 			const cartesDistribuees = melangerCartes(creerCartes()).slice(0, 2);
-			CarteLocaux = cartesDistribuees[0];
-			CarteVisiteurs = cartesDistribuees[1];
+			CarteJoueurs = cartesDistribuees[0];
+			CarteBanque = cartesDistribuees[1];
 
-			const carteLocauxImg = document.querySelector('.carte-locaux');
-			const carteVisiteursImg = document.querySelector('.carte-visiteurs');
+			const CarteJoueursImg = document.querySelector('.carte-locaux');
+			const CarteBanqueImg = document.querySelector('.carte-visiteurs');
 
 			// Animer la disparition des anciennes cartes
-			carteLocauxImg.style.transform = 'translateX(-200%)';
-			carteVisiteursImg.style.transform = 'translateX(200%)';
-			carteLocauxImg.style.opacity = 0;
-			carteVisiteursImg.style.opacity = 0;
+			CarteJoueursImg.style.transform = 'translateX(-200%)';
+			CarteBanqueImg.style.transform = 'translateX(200%)';
+			CarteJoueursImg.style.opacity = 0;
+			CarteBanqueImg.style.opacity = 0;
 
 			// Attendre la fin de l'animation de disparition
 			setTimeout(() => {
 				// Réinitialiser les anciennes cartes
-				carteLocauxImg.src = '';
-				carteLocauxImg.alt = '';
-				carteVisiteursImg.src = '';
-				carteVisiteursImg.alt = '';
+				CarteJoueursImg.src = '';
+				CarteJoueursImg.alt = '';
+				CarteBanqueImg.src = '';
+				CarteBanqueImg.alt = '';
 
 				// Réinitialiser la position des cartes
-				carteLocauxImg.style.transform = 'translateX(-200%)';
-				carteVisiteursImg.style.transform = 'translateX(200%)';
+				CarteJoueursImg.style.transform = 'translateX(-200%)';
+				CarteBanqueImg.style.transform = 'translateX(200%)';
 
 				// Animer l'apparition des nouvelles cartes
 				setTimeout(() => {
-					carteLocauxImg.src = `src/assets/img/Cartes/${CarteLocaux.valeur}_de_${CarteLocaux.type}.jpg`;
-					carteVisiteursImg.src = `src/assets/img/Cartes/${CarteVisiteurs.valeur}_de_${CarteVisiteurs.type}.jpg`;
-					carteLocauxImg.style.opacity = 1;
-					carteVisiteursImg.style.opacity = 1;
+					CarteJoueursImg.src = `src/assets/img/Cartes/${CarteJoueurs.valeur}_de_${CarteJoueurs.type}.jpg`;
+					CarteBanqueImg.src = `src/assets/img/Cartes/${CarteBanque.valeur}_de_${CarteBanque.type}.jpg`;
+					CarteJoueursImg.style.opacity = 1;
+					CarteBanqueImg.style.opacity = 1;
 
-					carteLocauxImg.style.transform = 'translateX(0)';
-					carteVisiteursImg.style.transform = 'translateX(0)';
+					CarteJoueursImg.style.transform = 'translateX(0)';
+					CarteBanqueImg.style.transform = 'translateX(0)';
 				}, 500);
 			}, 500);
 
-			carteLocauxImg.addEventListener('transitionend', () => {
-				carteLocauxImg.style.transform = 'rotateX(30deg)';
+			CarteJoueursImg.addEventListener('transitionend', () => {
+				CarteJoueursImg.style.transform = 'rotateX(30deg)';
 			});
 
-			carteVisiteursImg.addEventListener('transitionend', () => {
-				carteVisiteursImg.style.transform = 'rotateX(30deg)';
+			CarteBanqueImg.addEventListener('transitionend', () => {
+				CarteBanqueImg.style.transform = 'rotateX(30deg)';
 			});
 		}
 		
 
 		// Fonction pour déterminer le gagnant
 		function determinerGagnant() {
+			let resultat;
 			const valeursCartes = {
 				'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 10, 'Q': 10, 'K': 10, 'A': 11
 			};
 		
-			const valeurCarteLocaux = valeursCartes[CarteLocaux.valeur];
-			const valeurCarteVisiteurs = valeursCartes[CarteVisiteurs.valeur];
+			const valeurCarteJoueurs = valeursCartes[CarteJoueurs.valeur];
+			const valeurCarteBanque = valeursCartes[CarteBanque.valeur];
 		
 			let gagnant;
-			if (valeurCarteLocaux > valeurCarteVisiteurs) {
+			if (valeurCarteJoueurs > valeurCarteBanque) {
 				gagnant = 'LOCAUX';
-			} else if (valeurCarteLocaux < valeurCarteVisiteurs) {
+			} else if (valeurCarteJoueurs < valeurCarteBanque) {
 				gagnant = 'VISITEURS';
 			} else {
 				gagnant = 'EGALITE';
 			}
 		
 			if (choixJoueur === gagnant) {
-				setTimeout(function() {
-					afficherPopup(`Vous avez gagné ! Vos crédits ont été crédités.`);
-				}, 3000);
+				resultat = 'Vous avez gagné ! Vos crédits ont été crédités.';
+
 				if (choixJoueur === 'EGALITE'){
 					credits.value += mise.value*12;
 				} else {
 					credits.value += mise.value*2;
 				}
 			} else {
-				setTimeout(function() {
-					afficherPopup(`Vous avez perdu. Meilleure chance la prochaine fois !`);
-				}, 3000);
 				if (gagnant === 'EGALITE'){
+					resultat = 'Vous avez perdu. Mais il y\'a Egalité ! On vous rembourse la moitié de votre mise.' ;
 					credits.value += mise.value/2;
+				} else {
+					resultat = 'Vous avez perdu. Meilleure chance la prochaine fois !';
 				}
 			}
+
+			mise.value = 0;
+			mettreAJourInformationsJeu();
+			afficherPopup(resultat);
+            if (resultat === 'Vous avez gagné ! Vos crédits ont été crédités.'){
+                setTimeout(function() {
+                    setTimeout(function() {
+                        activerBoutonsJeu('gagné');
+                    }, 2000);
+
+                    setTimeout(function() {
+                        activerBoutonsJeu('initial');
+                    }, 9000);
+                })
+            } else if (resultat === 'Vous avez perdu. Meilleure chance la prochaine fois !'){
+                setTimeout(function() {
+                    setTimeout(function() {
+                        activerBoutonsJeu('perdu');
+                    }, 2000);
+
+                    setTimeout(function() {
+                        activerBoutonsJeu('initial');
+                    }, 9000);
+                })
+            } else {
+                setTimeout(function() {
+                        activerBoutonsJeu('initial');
+                }, 1000);
+            }
 		
 			mise.value = 0;
 		}
@@ -291,16 +359,24 @@
 
 		// Fonction pour afficher une popup
 		function afficherPopup(resultat) {
-			const popupResultat = document.createElement('div');
-			popupResultat.classList.add('resultat-popup');
-			popupResultat.textContent = resultat;
-			popupResultat.style.position = 'fixed';
-			popupResultat.style.top = '50%';
-			popupResultat.style.left = '50%';
-			popupResultat.style.transform = 'translate(-50%, -50%)';
-			popupResultat.style.backgroundColor = '#333';
-			popupResultat.style.color = '#fff';
-			popupResultat.style.padding = '20px';
+            const popupResultat = document.createElement('div');
+            popupResultat.classList.add('resultat-popup');
+            popupResultat.textContent = resultat;
+            popupResultat.style.position = 'fixed';
+            popupResultat.style.top = '50%';
+            popupResultat.style.left = '50%';
+            popupResultat.style.transform = 'translate(-50%, -50%)';
+            popupResultat.style.color = '#fff';
+            if (resultat == 'Vous avez gagné ! Vos crédits ont été crédités.'){
+                popupResultat.style.backgroundColor = '#1d8010';
+            }
+            else if (resultat == 'Vous avez perdu. Meilleure chance la prochaine fois !'){
+                popupResultat.style.backgroundColor = '#ff0000';
+            }
+            else {
+                popupResultat.style.backgroundColor = '#270799';
+            }
+            popupResultat.style.padding = '45px';
 			popupResultat.style.borderRadius = '10px';
 			popupResultat.style.zIndex = '9999';
 			popupResultat.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
@@ -351,15 +427,23 @@
 
 
 		function demarrerPartie() {
-			activerBoutonsJeu(false);
+
+			activerBoutonsJeu('jeu');
 
 			distribuerCartes();
-			determinerGagnant();
-			mettreAJourInformationsJeu();
+			setTimeout(() => {
+				determinerGagnant();
+			},4000)
 
-			setTimeout(function() {
-				activerBoutonsJeu(true);
-			}, 8000);
+			// Initialiser le jeu
+			const jeuDeCartes = creerCartes();
+        	cartes.value = melangerCartes(jeuDeCartes);
 		}
+
+
+		// Appel initial lors du chargement de la page
+		window.onload = function() {
+            activerBoutonsJeu('initial');
+        }
 	})
 </script>

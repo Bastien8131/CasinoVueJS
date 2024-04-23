@@ -3,7 +3,7 @@
 
 	let credits = ref(10000);
 	let mise = ref(0);
-	let numeroMiser;
+	let numeroMiser = ref(-1);
 	let numeroGagnant;
 
 	
@@ -29,7 +29,7 @@
 					credits.value -= valeurJeton;
 					mettreAJourInformationsJeu();
 				} else {
-					alert("Vous n'avez pas assez de crédits pour placer une mise.");
+					afficherPopupResultat("Vous n'avez pas assez de crédits pour placer une mise.");
 				}
 
 			});
@@ -46,35 +46,62 @@
 
 				if (mise.value > 0) {
 					const valeurNumero = parseInt(numero.getAttribute('value'));
-					numeroMiser = valeurNumero;
+					numeroMiser.value = valeurNumero;
 				} else {
-					alert("Veuillez d'abord sélectionner un jeton de mise.");
+					afficherPopupResultat("Veuillez d'abord sélectionner un jeton de mise.");
 				}
 			});
 		});
 
 
         // Fonction pour activer/désactiver les jetons de mise
-        function activerBoutonsJeu(activer) {
+        function activerBoutonsJeu(mode) {
             const boutonsJetons = document.querySelectorAll('.bouton-jeton');
+			const boutonNumero = document.querySelectorAll('.numero');
+			const boutonLancer = document.getElementById('lancer-roulette');
+			const ballons = document.querySelector('.ballons-img');
+            const pauvre = document.querySelector('.pauvre-img');
 
-            if (activer) {
-                boutonsJetons.forEach(bouton => bouton.style.display = 'inline');
-            } else {
-                boutonsJetons.forEach(bouton => bouton.style.display = 'none');
-            }
+			switch (mode) {
+                case 'initial':
+                    // Affichage initial des éléments
+					boutonNumero.forEach(bouton => bouton.style.display = 'inline');
+					boutonsJetons.forEach(bouton => bouton.style.display = 'inline');
+					boutonLancer.style.display = 'inline';
+                    ballons.style.display = 'none';
+                    pauvre.style.display = 'none';
+                    break;
+				case 'jeu':
+                    // Affichage pendant le jeu
+					boutonNumero.forEach(bouton => bouton.style.display = 'none');
+					boutonsJetons.forEach(bouton => bouton.style.display = 'none');
+					boutonLancer.style.display = 'none';
+                    ballons.style.display = 'none';
+                    pauvre.style.display = 'none';
+                    break;
+				case 'gagné':
+                    // Affichage lorsque le joueur gagne
+                    ballons.style.display = 'block';
+                    pauvre.style.display = 'none';
+                    break;
+                case 'perdu':
+                    // Affichage lorsque le joueur perd
+                    ballons.style.display = 'none';
+                    pauvre.style.display = 'block';
+                    break;
+			}
         }
 
 
 
 		// Pour le bouton "Lancer la roulette"
 		document.getElementById('lancer-roulette').addEventListener('click', function() {
-      if (numeroMiser != null) {
-        activerBoutonsJeu(false);
-			  demarrerPartie();
-      } else {
-        alert("Veuillez d'abord selectionner une mise.")
-      }
+      	if (mise.value > 0 && numeroMiser.value != -1) {
+        	activerBoutonsJeu('jeu');
+			demarrerPartie();
+      	} else {
+        	afficherPopupResultat('Veuillez d\'abord selectionner une mise.');
+      	}
 			
 		});
 
@@ -82,33 +109,33 @@
 		function resultat(){
 
 			let resultat = false;
-			console.log("vous avez misé sur le numero "+numeroMiser);
+			console.log("vous avez misé sur le numero "+numeroMiser.value);
 			console.log("Le numero gagnant est " + numeroGagnant + " !");
 
 
 			//les 3 colonnes 2to1 ou les 3 colonnes 1st12, 2nd12, 3rd12
-			if ((numeroMiser === 85 && [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 14].includes(numeroGagnant)) ||
-				(numeroMiser === 86 && [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35].includes(numeroGagnant)) ||
-				(numeroMiser === 87 && [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36].includes(numeroGagnant)) ||
-				(numeroMiser === 112 && [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(numeroGagnant)) ||
-				(numeroMiser === 1324 && [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24].includes(numeroGagnant)) ||
-				(numeroMiser === 2536 && [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36].includes(numeroGagnant))){
+			if ((numeroMiser.value === 85 && [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 14].includes(numeroGagnant)) ||
+				(numeroMiser.value === 86 && [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35].includes(numeroGagnant)) ||
+				(numeroMiser.value === 87 && [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36].includes(numeroGagnant)) ||
+				(numeroMiser.value === 112 && [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].includes(numeroGagnant)) ||
+				(numeroMiser.value === 1324 && [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24].includes(numeroGagnant)) ||
+				(numeroMiser.value === 2536 && [25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36].includes(numeroGagnant))){
 					credits.value += (mise.value*3);
 					resultat = true;
 			}
 
 			//EVEN (paire) ou ODD (impair) ou 1to18 ou 19to36 ou ROUGE ou NOIR
-			if ((numeroMiser === 48 && [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36].includes(numeroGagnant)) ||
-				(numeroMiser === 49 && [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35].includes(numeroGagnant)) ||
-				(numeroMiser === 118 && [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].includes(numeroGagnant)) ||
-				(numeroMiser === 1936 && [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36].includes(numeroGagnant)) ||
-				(numeroMiser === 99 && [27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3, 32, 19, 21, 25, 34].includes(numeroGagnant)) ||
-				(numeroMiser === 98 && [6, 13, 11, 8, 10, 24, 33, 20, 31, 22, 29, 28, 35, 26, 15, 4, 2, 17].includes(numeroGagnant))){
+			if ((numeroMiser.value === 48 && [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36].includes(numeroGagnant)) ||
+				(numeroMiser.value === 49 && [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35].includes(numeroGagnant)) ||
+				(numeroMiser.value === 118 && [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].includes(numeroGagnant)) ||
+				(numeroMiser.value === 1936 && [19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36].includes(numeroGagnant)) ||
+				(numeroMiser.value === 99 && [27, 36, 30, 23, 5, 16, 1, 14, 9, 18, 7, 12, 3, 32, 19, 21, 25, 34].includes(numeroGagnant)) ||
+				(numeroMiser.value === 98 && [6, 13, 11, 8, 10, 24, 33, 20, 31, 22, 29, 28, 35, 26, 15, 4, 2, 17].includes(numeroGagnant))){
 					credits.value += (mise.value*2);
 					resultat = true;
 			}
 
-			if ((numeroMiser === numeroGagnant)){
+			if ((numeroMiser.value === numeroGagnant)){
 				credits.value += (mise.value*36);
 				resultat = true;
 
@@ -118,16 +145,21 @@
 		}
 
 		function afficherPopupResultat(resultat) {
-			const popupResultat = document.createElement('div');
-			popupResultat.classList.add('resultat-popup');
-			popupResultat.textContent = resultat;
-			popupResultat.style.position = 'fixed';
-			popupResultat.style.top = '50%';
-			popupResultat.style.left = '50%';
-			popupResultat.style.transform = 'translate(-50%, -50%)';
-			popupResultat.style.backgroundColor = '#333';
-			popupResultat.style.color = '#fff';
-			popupResultat.style.padding = '20px';
+            const popupResultat = document.createElement('div');
+            popupResultat.classList.add('resultat-popup');
+            popupResultat.textContent = resultat;
+            popupResultat.style.position = 'fixed';
+            popupResultat.style.top = '50%';
+            popupResultat.style.left = '50%';
+            popupResultat.style.transform = 'translate(-50%, -50%)';
+            popupResultat.style.color = '#fff';
+            if (resultat == 'Vous avez gagné ! Vos crédits ont été crédités.'){
+                popupResultat.style.backgroundColor = '#1d8010';
+            }
+            else {
+                popupResultat.style.backgroundColor = '#270799';
+            }
+            popupResultat.style.padding = '45px';
 			popupResultat.style.borderRadius = '10px';
 			popupResultat.style.zIndex = '9999';
 			popupResultat.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
@@ -146,17 +178,45 @@
 
 
 		function terminerPartie(){
+			let vainqueur;
+
 			if (resultat()){
-				afficherPopupResultat('Vous avez gagné !');
+				vainqueur = 'Vous avez gagné ! Vos crédits ont été crédités.';
 			}
 			else {
-				afficherPopupResultat('Vous avez perdu !');
+				vainqueur = 'Vous avez perdu. Meilleure chance la prochaine fois !';
 			}
 
-			mise.value = 0;
-			mettreAJourInformationsJeu();
-			activerBoutonsJeu(true);
+			afficherPopupResultat(vainqueur);
+            if (vainqueur === 'Vous avez gagné ! Vos crédits ont été crédités.'){
+                setTimeout(function() {
+                    setTimeout(function() {
+                        activerBoutonsJeu('gagné');
+                    }, 2000);
 
+                    setTimeout(function() {
+                        activerBoutonsJeu('initial');
+                    }, 9000);
+                })
+            } else if (vainqueur === 'Vous avez perdu. Meilleure chance la prochaine fois !'){
+                setTimeout(function() {
+                    setTimeout(function() {
+                        activerBoutonsJeu('perdu');
+                    }, 2000);
+
+                    setTimeout(function() {
+                        activerBoutonsJeu('initial');
+                    }, 9000);
+                })
+            } else {
+                setTimeout(function() {
+                        activerBoutonsJeu('initial');
+                }, 1000);
+            }
+
+			mise.value = 0;
+			numeroMiser.value = -1;
+			mettreAJourInformationsJeu();
 		}
 
 
@@ -215,11 +275,20 @@
 			numeroGagnant = numeros[(indexNumero % numeros.length)];
 			return numeroGagnant;
 		}
+
+
+		// Appel initial lors du chargement de la page
+		window.onload = function() {
+            activerBoutonsJeu('initial');
+        }
 	})
 </script>
 
 <template>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+	<img src="@/assets/img/ballons.svg" alt="" class="ballons-img">
+    <img src="@/assets/img/pauvre.svg" alt="" class="pauvre-img">
 
 	<div class="roulette-container d-flex justify-content-space">
         <img class="roue" src="@/assets/img/Roulette/Roue/roue.svg" alt="Roulette">
@@ -309,6 +378,24 @@
 </template>
 
 <style scoped>
+    @keyframes monter {
+        0% { transform: translateY(100vh); }
+        100% { transform: translateY(-200vh); }
+    }
+    .ballons-img{
+        position: absolute;
+        display: none;
+        z-index: 9999;
+        transform: translateX(0);
+        animation: monter 10s linear forwards;
+    }
+    .pauvre-img{
+        position: absolute;
+        display: none;
+        z-index: 9999;
+        transform: translateX(0);
+        animation: monter 10s linear forwards;
+    }
 	.roue {
 		width: 40%;
 		height: auto;

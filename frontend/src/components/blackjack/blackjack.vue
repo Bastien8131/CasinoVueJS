@@ -1,6 +1,9 @@
 <template>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <img src="@/assets/img/ballons.svg" alt="" class="ballons-img">
+    <img src="@/assets/img/pauvre.svg" alt="" class="pauvre-img">
+
     <div class="blackjack-container">
         <div class="col-md-12">
             <div class="text-center texte-croupier"><span id="score-croupier"></span></div>
@@ -33,15 +36,11 @@
 
 <script setup>
     import { onMounted, ref } from 'vue';
-    import {useUserStore} from "@/stores/user";
-
-    const userStore = useUserStore();
 
     let mainJoueur = ref([]);
     let mainCroupier = ref([]);
     let cartes = ref([]);
     let credits = ref(10000);
-    // let credits = ref(userStore.getCredit);
     let mise = ref(0);
 
     onMounted(() => {
@@ -171,31 +170,54 @@
             document.getElementById('mise').textContent = mise.value;
         }
 
+
         // Fonction pour activer/désactiver les boutons de jeu
-        function activerBoutonsJeu(activer) {
+        function activerBoutonsJeu(mode) {
             const boutonDoubler = document.getElementById('doubler-btn');
             const boutonTirer = document.getElementById('tirer-btn');
             const boutonRester = document.getElementById('rester-btn');
             const boutonDonner = document.getElementById('donner-btn');
             const boutonsJetons = document.querySelectorAll('.bouton-jeton');
+            const ballons = document.querySelector('.ballons-img');
+            const pauvre = document.querySelector('.pauvre-img');
 
-            boutonDoubler.disabled = !activer;
-            boutonTirer.disabled = !activer;
-            boutonRester.disabled = !activer;
-            boutonDonner.disabled = activer;
-
-            if (activer) {
-                boutonDoubler.style.display = 'inline-block';
-                boutonTirer.style.display = 'inline-block';
-                boutonRester.style.display = 'inline-block';
-                boutonDonner.style.display = 'none';
-                boutonsJetons.forEach(bouton => bouton.style.display = 'none');
-            } else {
-                boutonDoubler.style.display = 'none';
-                boutonTirer.style.display = 'none';
-                boutonRester.style.display = 'none';
-                boutonDonner.style.display = 'inline-block';
-                boutonsJetons.forEach(bouton => bouton.style.display = 'inline');
+            switch (mode) {
+                case 'initial':
+                    // Affichage initial des éléments
+                    boutonDoubler.style.display = 'none';
+                    boutonTirer.style.display = 'none';
+                    boutonRester.style.display = 'none';
+                    boutonDonner.style.display = 'inline-block';
+                    boutonsJetons.forEach(bouton => bouton.style.display = 'inline');
+                    ballons.style.display = 'none';
+                    pauvre.style.display = 'none';
+                    break;
+                case 'jeu':
+                    // Affichage pendant le jeu
+                    boutonDoubler.style.display = 'inline-block';
+                    boutonTirer.style.display = 'inline-block';
+                    boutonRester.style.display = 'inline-block';
+                    boutonDonner.style.display = 'none';
+                    boutonsJetons.forEach(bouton => bouton.style.display = 'none');
+                    ballons.style.display = 'none';
+                    pauvre.style.display = 'none';
+                    break;
+                case 'gagné':
+                    // Affichage lorsque le joueur gagne
+                    boutonDoubler.style.display = 'none';
+                    boutonTirer.style.display = 'none';
+                    boutonRester.style.display = 'none';
+                    ballons.style.display = 'block';
+                    pauvre.style.display = 'none';
+                    break;
+                case 'perdu':
+                    // Affichage lorsque le joueur perd
+                    boutonDoubler.style.display = 'none';
+                    boutonTirer.style.display = 'none';
+                    boutonRester.style.display = 'none';
+                    ballons.style.display = 'none';
+                    pauvre.style.display = 'block';
+                    break;
             }
         }
 
@@ -208,12 +230,11 @@
                 distribuer(mainJoueur.value);
                 afficherMain(mainJoueur.value, document.querySelector('.main-joueur'), false);
                 mettreAJourInformationsJeu();
-                activerBoutonsJeu(false);
                 jouerCroupier();
             } else if (credits.value < mise.value) {
-                alert("Vous n'avez pas assez de crédits pour doubler votre mise.");
+                afficherPopupResultat("Vous n'avez pas assez de crédits pour doubler votre mise.");
             } else {
-                alert("Vous ne pouvez doubler que si vous avez seulement deux cartes.");
+                afficherPopupResultat("Vous ne pouvez doubler que si vous avez seulement deux cartes.");
             }
         });
 
@@ -241,11 +262,12 @@
         // Pour le bouton "Donner"
         const donnerBtn = document.getElementById('donner-btn');
         donnerBtn.addEventListener('click', function() {
-        if (mise.value > 0) {
-            demarrerPartie();
-        } else {
-            alert("Veuillez d'abord sélectionner une mise.");
-        }
+            if (mise.value > 0) {
+                activerBoutonsJeu('jeu');
+                demarrerPartie();
+            } else {
+                afficherPopupResultat("Veuillez d'abord sélectionner une mise.");
+            }
         });
 
         // Appliquer la mise
@@ -260,7 +282,7 @@
                     credits.value -= valeurJeton;
                     mettreAJourInformationsJeu();
                 } else {
-                    alert("Vous n'avez pas assez de crédits pour placer une mise.");
+                    afficherPopupResultat("Vous n'avez pas assez de crédits pour placer une mise.");
                 }
             });
         });
@@ -270,7 +292,6 @@
 
         // Fonction pour gérer le jeu du croupier
         function jouerCroupier() {
-            activerBoutonsJeu(false);
             croupierJoue.value = true;
 
             const zoneCroupier = document.querySelector('.main-croupier');
@@ -298,9 +319,17 @@
             popupResultat.style.top = '50%';
             popupResultat.style.left = '50%';
             popupResultat.style.transform = 'translate(-50%, -50%)';
-            popupResultat.style.backgroundColor = '#333';
             popupResultat.style.color = '#fff';
-            popupResultat.style.padding = '20px';
+            if (resultat == 'Vous avez gagné ! Vos crédits ont été crédités.'){
+                popupResultat.style.backgroundColor = '#1d8010';
+            }
+            else if (resultat == 'Vous avez perdu. Meilleure chance la prochaine fois !'){
+                popupResultat.style.backgroundColor = '#ff0000';
+            }
+            else {
+                popupResultat.style.backgroundColor = '#270799';
+            }
+            popupResultat.style.padding = '45px';
             popupResultat.style.borderRadius = '10px';
             popupResultat.style.zIndex = '9999';
             popupResultat.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
@@ -317,17 +346,13 @@
 
         // Fonction pour terminer la partie et donner le résultat
         function terminerPartie() {
-            activerBoutonsJeu(false); // Désactiver les boutons de jeu
             const scoreJoueur = calculerValeurMain(mainJoueur.value);
             const scoreCroupier = calculerValeurMain(mainCroupier.value);
 
             let resultat;
             if (scoreJoueur > 21 || (scoreCroupier <= 21 && scoreCroupier > scoreJoueur)) {
                 // Le joueur a perdu
-                resultat = "Vous avez perdu !";
-                // Désactiver les boutons "Tirer" et "Rester" après avoir perdu
-                document.getElementById('tirer-btn').disabled = true;
-                document.getElementById('rester-btn').disabled = true;
+                resultat = "Vous avez perdu. Meilleure chance la prochaine fois !";
             } else if (scoreJoueur === scoreCroupier) {
                 // Match nul, récupérer la mise
                 credits.value += mise.value;
@@ -335,10 +360,35 @@
             } else {
                 // Le joueur a gagné
                 credits.value += mise.value * 2;
-                resultat = "Vous avez gagné !";
+                resultat = "Vous avez gagné ! Vos crédits ont été crédités.";
             }
 
             afficherPopupResultat(resultat);
+            if (resultat === 'Vous avez gagné ! Vos crédits ont été crédités.'){
+                setTimeout(function() {
+                    setTimeout(function() {
+                        activerBoutonsJeu('gagné');
+                    }, 2000);
+
+                    setTimeout(function() {
+                        activerBoutonsJeu('initial');
+                    }, 9000);
+                })
+            } else if (resultat === 'Vous avez perdu. Meilleure chance la prochaine fois !'){
+                setTimeout(function() {
+                    setTimeout(function() {
+                        activerBoutonsJeu('perdu');
+                    }, 2000);
+
+                    setTimeout(function() {
+                        activerBoutonsJeu('initial');
+                    }, 9000);
+                })
+            } else {
+                setTimeout(function() {
+                        activerBoutonsJeu('initial');
+                }, 1000);
+            }
 
             mise.value = 0;
             mettreAJourInformationsJeu();
@@ -369,17 +419,37 @@
             afficherMain(mainCroupier.value, zoneCroupier, true, 2000);
 
             mettreAJourInformationsJeu();
-
-            activerBoutonsJeu(true);
+        }
+        // Appel initial lors du chargement de la page
+        window.onload = function() {
+            activerBoutonsJeu('initial');
         }
 
         // Initialiser le jeu
-        creerCartes();
-        melangerCartes();
+        const jeuDeCartes = creerCartes();
+        cartes.value = melangerCartes(jeuDeCartes);
     })
 </script>
 
 <style scoped>
+    @keyframes monter {
+        0% { transform: translateY(100vh); }
+        100% { transform: translateY(-200vh); }
+    }
+    .ballons-img{
+        position: absolute;
+        display: none;
+        z-index: 9999;
+        transform: translateX(0);
+        animation: monter 10s linear forwards;
+    }
+    .pauvre-img{
+        position: absolute;
+        display: none;
+        z-index: 9999;
+        transform: translateX(0);
+        animation: monter 10s linear forwards;
+    }
     .blackjack-container {
         background-image: url("@/assets/img/Blackjack/table.jpg");
         background-size: cover;
