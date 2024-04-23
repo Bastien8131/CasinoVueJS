@@ -11,6 +11,7 @@ import {useUserStore} from "@/stores/user";
 
 const userStore = useUserStore();
 const content = ref('connexion');
+const sidebarLinks = document.querySelectorAll('.btn-sidebar');
 
 const changeContent = (newContent) => {
   content.value = newContent
@@ -21,12 +22,19 @@ const addCredits = () => {
   content.value = 'blackjack'
 }
 
-//listen userStore credit
-// onMounted(() => {
-//   setInterval(() => {
-//     console.log(userStore.getCredit)
-//   }, 1000)
-// })
+sidebarLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    toggler.classList.remove('active'); // Ferme le bouton du menu burger
+    menu.classList.remove('active');    // Ferme la sidebar
+  });
+});
+
+const showBurger = () => {
+  let toggler = document.querySelector('.menu__toggler');
+  let menu = document.querySelector('.menu');
+  toggler.classList.toggle('active');
+  menu.classList.toggle('active');
+}
 
 </script>
 
@@ -41,7 +49,6 @@ const addCredits = () => {
       <a @click="changeContent('machineSous')" class="btn-sidebar" id="machineSous">Machine à sous</a>
       <a @click="changeContent('FootballStudio')" class="btn-sidebar" id="FootballStudio">Football Studio</a>
   </div>
-  <div class="menu__toggler" v-if="content !== 'connexion'"><span></span></div>
   <component class="main-content" :is="content">
     <accueil v-if="content === 'accueil'"></accueil>
     <machineSous v-if="content === 'machineSous'"></machineSous>
@@ -53,6 +60,7 @@ const addCredits = () => {
   </component>
   <div class="hud-value" v-if="content !== 'connexion' && content !== 'inscription'">
     <div class="content">
+      <div @click="showBurger" class="menu__toggler"><span></span></div>
       <div class="acheter-crd">
         <button @click="addCredits">Acheter Credits</button>
       </div>
