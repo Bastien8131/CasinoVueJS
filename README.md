@@ -5,6 +5,21 @@ Liste des membres du groupe :
 - Yacine HABBAK
 - Bastien MEZIERE
 
+## Table des Matières
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+3. [Démarrage](#démarrage)
+4. [Structure du Projet](#structure-du-projet)
+5. [Utilisation](#utilisation)
+
+# introduction
+
+Cette application est divisée en 2 parties. La première partie est la section casino, qui se trouve sur le port `5173`. Cette partie de l'application n'est accessible qu'aux utilisateurs. C'est là que l'on trouvera les différents jeux du site.
+
+La deuxième partie est la section de gestion administrative, qui se trouve sur le port `5170`. Cette partie n'est accessible qu'aux administrateurs et permet la gestion des utilisateurs du casino. Dans cette interface, les administrateurs pourront notamment bannir ou débannir des utilisateurs, voire supprimer des comptes.
+
+# installation
+
 ## Ce repositories contient dans deux dossiers séparés le backend (NodeJS) et le frontend (VueJS).
 
 La racine du projet, contient 2 dossier `backend` et `frontend`, pour naviguer vers ces dossiers il suffit de faire `cd`, et pour revenir en arriere il suffit de faire `cd ../`.
@@ -17,6 +32,7 @@ npm install
 cd frontend
 npm install
 ```
+# démarrage
 
 Pour demarrer le frontend (VueJS) :
 
@@ -34,6 +50,8 @@ cd backend
 npm run start
 ```
 Port du back-end : 5170 où l'on retrouve la gestion administrateur
+
+# structure-du-projet
 
 ## Les pages du projet
 - Page par défaut : La page de connexion qui permet de se connecter avec son compte au site de casino
@@ -56,6 +74,7 @@ Port du back-end : 5170 où l'on retrouve la gestion administrateur
 - Jeu Football Studio : ?
 - Jeu Baccarat : Fournit le jeu de cartes Baccarat, où le joueur parie sur le résultat de la comparaison entre les mains du banquier et du joueur.
 
+# utilisation
 
 ## Description des Routes API
 
