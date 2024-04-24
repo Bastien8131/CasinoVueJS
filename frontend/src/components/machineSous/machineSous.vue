@@ -14,7 +14,7 @@
 			<a class="bouton-jeton" value="1000"><img src="@/assets/img/jetons/1000€.png" alt="jeton de 1000€"></a>
 		</div>
 		<div class="infos">
-			<a class="jouer">JOUER</a>
+			<a class="jouer"><img src="@/assets/img/MachineSous/btn_CLICK.png" alt="" class="jouer-img"></a>
 			<div class="mise-container">
 			<p>Mise : <span id="mise">{{ mise }}</span></p>
 			</div>
@@ -112,7 +112,7 @@
 		popupResultat.classList.add('resultat-popup');
 		popupResultat.textContent = resultat;
 		popupResultat.style.position = 'fixed';
-		popupResultat.style.top = '50%';
+		popupResultat.style.top = '20%';
 		popupResultat.style.left = '50%';
 		popupResultat.style.transform = 'translate(-50%, -50%)';
 		popupResultat.style.color = '#fff';
@@ -255,8 +255,13 @@
 		display: flex;
 		align-items: center;
 	}
-	.jouer {
+	.jouer-img {
+		position: relative;
+		margin-bottom: 16%;
+		margin-left: 50%;
+		width: 17%;
 		cursor: pointer;
+		transform: rotateX(40deg);
 	}
 	.roueslot {
 		position: absolute;
