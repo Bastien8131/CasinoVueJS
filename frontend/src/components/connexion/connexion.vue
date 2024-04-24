@@ -6,8 +6,8 @@ const userStore = useUserStore();
 const emit = defineEmits(['inFocus', 'submit'])
 
 let errorMessage = ref('');
-let pseudo = ref('usertest');
-let email = ref('usertest@u.com');
+let pseudo = ref('bastienb');
+let email = ref('bastienb@casino.com');
 
 const submit = async () => {
   try {
@@ -36,20 +36,17 @@ const submit = async () => {
         {{ errorMessage }}
       </div>
 			<form>
-			<div class="mb-3">
+        <div class="mb-3">
+          <label for="pseudo" class="form-label text-light">Pseudo</label>
+          <input type="pseudo" class="form-control" id="pseudo" placeholder="Entrez votre pseudo" required v-model="pseudo">
+        </div>
+			<div class="mb-5">
 				<label for="email" class="form-label text-light">E-mail</label>
 				<input type="email" class="form-control" id="email" placeholder="Entrez votre email" required v-model="email">
 			</div>
-			<div class="mb-5">
-				<label for="pseudo" class="form-label text-light">Pseudo</label>
-				<input type="pseudo" class="form-control" id="pseudo" placeholder="Entrez votre pseudo" required v-model="pseudo">
-			</div>
 			<div class="d-grid gap-2">
 				<button type="button" class="btn btn-primary" @click="submit()">SE CONNECTER</button>
-				<button type="button" class="btn btn-secondary">CRÉER UN COMPTE</button>
-			</div>
-			<div class="text-center mt-3">
-				<a href="#" class="text-light">Mot de passe oublié ?</a>
+				<button type="button" class="btn btn-secondary" @click="$emit('changeContent', 'inscription')">CRÉER UN COMPTE</button>
 			</div>
 			</form>
 		</div>

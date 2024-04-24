@@ -1,11 +1,12 @@
 class User{
-    constructor(id, socketId, pseudo, email, credit, score) {
+    constructor(id, socketId, pseudo, email, credit, score, bannie) {
         this._id = id;
         this._socketId = socketId;
         this._pseudo = pseudo;
         this._email = email;
         this._credit = credit;
         this._score = score;
+        this._bannie = bannie;
     }
 
     get id() {
@@ -56,8 +57,16 @@ class User{
         this._score = value;
     }
 
+    get bannie() {
+        return this._bannie;
+    }
+
+    set bannie(value) {
+        this._bannie = value;
+    }
+
     toString(){
-        return `User: ${this._id} ${this._socketId} ${this._pseudo} ${this._email} ${this._credit} ${this._score}`;
+        return `User[${this._id}, ${this._pseudo}, ${this._email}, ${this._credit}, ${this._score}, ${this._bannie}]`;
     }
 }
 

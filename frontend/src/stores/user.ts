@@ -89,6 +89,12 @@ export const useUserStore = defineStore('user',{
       //     console.error(response.message)
       //   }
       // })
+    },
+    onBan() {
+      const socket = this.$socket;
+      socket.on('ban', () => {
+        this.setUserData(0, '', '', '', 0, 0)
+      });
     }
   },
   getters: {

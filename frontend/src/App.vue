@@ -38,6 +38,14 @@
 		sidebarLinks.forEach(link => {
 			link.addEventListener('click', closeMenu);
 		});
+
+    setInterval(() => {
+      userStore.onBan();
+      let socketId = userStore.getSocketId;
+      if(socketId === '' && content.value !== 'inscription'){
+        content.value = 'connexion';
+      }
+    }, 1000);
 	});
 </script>
 
@@ -45,8 +53,8 @@
 	<div class="bg-overflow"></div>
 	<div ref="menu" class="menu">
 		<a @click="changeContent('accueil')" class="btn-sidebar" id="accueil">Accueil</a>
-		<a @click="changeContent('connexion')" class="btn-sidebar" id="connexion">Connexion</a>
-		<a @click="changeContent('inscription')" class="btn-sidebar" id="inscription">Inscription</a>
+<!--		<a @click="changeContent('connexion')" class="btn-sidebar" id="connexion">Connexion</a>-->
+<!--		<a @click="changeContent('inscription')" class="btn-sidebar" id="inscription">Inscription</a>-->
 		<a @click="changeContent('roulette')" class="btn-sidebar" id="roulette">Roulette</a>
 		<a @click="changeContent('blackjack')" class="btn-sidebar" id="blackjack">BlackJack</a>
 		<a @click="changeContent('machineSous')" class="btn-sidebar" id="machineSous">Machine à sous</a>
@@ -57,7 +65,7 @@
 		<accueil v-if="content === 'accueil'" @changeContent="changeContent"></accueil>
 		<machineSous v-if="content === 'machineSous'"></machineSous>
 		<connexion v-if="content === 'connexion'" @changeContent="changeContent"></connexion>
-		<inscription v-if="content === 'inscription'"></inscription>
+		<inscription v-if="content === 'inscription'" @changeContent="changeContent"></inscription>
 		<roulette v-if="content === 'roulette'"></roulette>
 		<blackjack v-if="content === 'blackjack'"></blackjack>
 		<FootballStudio v-if="content === 'FootballStudio'"></FootballStudio>
