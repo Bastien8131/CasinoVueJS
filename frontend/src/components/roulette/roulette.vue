@@ -1,7 +1,9 @@
 <script setup>
 	import { onMounted, ref } from 'vue';
+	import { useUserStore } from "@/stores/user";
 
-	let credits = ref(10000);
+	let userStore = useUserStore();
+	let credits = ref(userStore.getCredit);
 	let mise = ref(0);
 	let numeroMiser = ref(-1);
 	let numeroGagnant;
@@ -11,8 +13,9 @@
 
 		// Fonction pour mettre à jour les scores
 		function mettreAJourInformationsJeu() {
-			document.getElementById('credits').textContent = credits.value;
 			document.getElementById('mise').textContent = mise.value;
+
+			userStore.setCredit(credits.value);
 		}
 
 
@@ -370,9 +373,8 @@
 
     <div class="col-md-8 infos text-center d-flex justify-content-center">
         <a id="lancer-roulette"><img src="@/assets/img/Roulette/lancer.png" alt="Lancer la partie" class="bouton"></a>
-        <div>
-            <p>Crédits : <span id="credits">10000</span></p>
-            <p>Mise : <span id="mise">0</span></p>
+		<div class="mise-container">
+                <p>Mise : <span id="mise">0</span></p>
         </div>
     </div>
 </template>
@@ -683,7 +685,7 @@
 		width: 10%;
 		height: auto;
 		margin-left: 85%;
-    cursor: pointer;
+    	cursor: pointer;
 	}
 	.infos {
 		font-weight: bold;
@@ -691,4 +693,8 @@
 		font-size: 1.35rem;
 		margin-top: -1%;
 	}
+	.mise-container {
+        display: flex;
+        align-items: center;
+    }
 </style>

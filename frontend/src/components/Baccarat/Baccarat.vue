@@ -21,8 +21,7 @@
             <a class="bouton-jeton" value="1000"><img src="@/assets/img/jetons/1000€.png" alt="jeton de 1000€"></a>
         </div>
         <div class="infos">
-            <div>
-                <p>Crédits : <span id="credits">10000</span></p>
+            <div class="mise-container">
                 <p>Mise : <span id="mise">0</span></p>
             </div>
         </div>
@@ -153,15 +152,21 @@
         bottom: 57%;
         margin-left: 40%;
     }
+    .mise-container {
+        display: flex;
+        align-items: center;
+    }
 </style>
 
 <script setup>
     import { onMounted, ref } from 'vue';
+    import { useUserStore } from "@/stores/user";
 
+    let userStore = useUserStore();
     let CarteJoueurs = ref([]);
     let CarteBanque = ref([]);
     let cartes = ref([]);
-    let credits = ref(10000);
+    let credits = ref(userStore.getCredit);
     let mise = ref(0);
     let choixJoueur;
 
@@ -185,10 +190,10 @@
 
         // Fonction pour mettre à jour les informations du jeu
         function mettreAJourInformationsJeu() {
-            document.getElementById('credits').textContent = credits.value;
             document.getElementById('mise').textContent = mise.value;
             document.getElementById('score-joueurs').textContent = calculerValeurMain(CarteJoueurs.value);
             document.getElementById('score-banque').textContent = calculerValeurMain(CarteBanque.value);
+            userStore.setCredit(credits.value);
         }
 
         // Fonction pour activer/désactiver les boutons de jeu

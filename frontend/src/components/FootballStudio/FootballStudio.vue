@@ -20,10 +20,9 @@
 			<a class="bouton-jeton" value="1000"><img src="@/assets/img/jetons/1000€.png" alt="jeton de 1000€"></a>
 		</div>
 		<div class="col-md-7 infos text-center d-flex justify-content-center">
-			<div>
-				<p>Crédits : <span id="credits">10000</span></p>
-				<p>Mise : <span id="mise">0</span></p>
-			</div>
+            <div class="mise-container">
+                <p>Mise : <span id="mise">0</span></p>
+            </div>
 		</div>
 		<div class="choix">
 			<a class="locaux"></a>
@@ -130,15 +129,21 @@
 		left: 61.9%;
 		cursor: pointer;
 	}
+	.mise-container {
+        display: flex;
+        align-items: center;
+    }
 </style>
 
 <script setup>
 	import { onMounted, ref } from 'vue';
+	import { useUserStore } from "@/stores/user";
 
+	let userStore = useUserStore();
 	let CarteJoueurs = ref([]);
 	let CarteBanque = ref([]);
 	let cartes = ref([]);
-	let credits = ref(10000);
+	let credits = ref(userStore.getCredit);
 	let mise = ref(0);
 	let choixJoueur;
 
@@ -352,8 +357,9 @@
 
 		// Fonction pour mettre à jour les informations du jeu
 		function mettreAJourInformationsJeu() {
-			document.getElementById('credits').textContent = credits.value;
 			document.getElementById('mise').textContent = mise.value;
+
+			userStore.setCredit(credits.value);
 		}
 		
 

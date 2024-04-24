@@ -26,8 +26,7 @@
             <a id="tirer-btn" style="display: none;"><img src="@/assets/img/Blackjack/hit.png" alt="HIT" class="bouton-img"></a>
             <a id="rester-btn" style="display: none;"><img src="@/assets/img/Blackjack/stand.png" alt="STAND" class="bouton-img"></a>
             <a id="donner-btn"><img src="@/assets/img/Blackjack/deal.png" alt="DEAL" class="bouton-img"></a>
-            <div>
-                <p>Crédits : <span id="credits">10000</span></p>
+            <div class="mise-container">
                 <p>Mise : <span id="mise">0</span></p>
             </div>
         </div>
@@ -36,11 +35,13 @@
 
 <script setup>
     import { onMounted, ref } from 'vue';
+    import { useUserStore } from "@/stores/user";
 
+    let userStore = useUserStore();
     let mainJoueur = ref([]);
     let mainCroupier = ref([]);
     let cartes = ref([]);
-    let credits = ref(10000);
+    let credits = ref(userStore.getCredit);
     let mise = ref(0);
 
     onMounted(() => {
@@ -166,8 +167,9 @@
                 document.getElementById('score-croupier').textContent = calculerValeurMain(mainCroupier.value, montrerCartesCachees);
             }
 
-            document.getElementById('credits').textContent = credits.value;
             document.getElementById('mise').textContent = mise.value;
+
+            userStore.setCredit(credits.value);
         }
 
 
@@ -521,5 +523,9 @@
         width: 70%;
         height: auto;
         padding: 1%;
+    }
+    .mise-container {
+        display: flex;
+        align-items: center;
     }
 </style> 
