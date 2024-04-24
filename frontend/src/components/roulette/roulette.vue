@@ -13,7 +13,7 @@
 
 		// Fonction pour mettre à jour les scores
 		function mettreAJourInformationsJeu() {
-			document.getElementById('mise').textContent = mise.value;
+			document.getElementById('mise').textContent = mise.value + ' €';
 
 			userStore.setCredit(credits.value);
 		}
@@ -374,7 +374,7 @@
     <div class="col-md-8 infos text-center d-flex justify-content-center">
         <a id="lancer-roulette"><img src="@/assets/img/Roulette/lancer.png" alt="Lancer la partie" class="bouton"></a>
 		<div class="mise-container">
-                <p>Mise : <span id="mise">0</span></p>
+			<img src="@/assets/img/icon_jeton.svg" alt="jeton" class="icon_jeton"><div class="texte_mise">Mise Totale<div id="mise">{{ mise }} €</div></div>
         </div>
     </div>
 </template>
@@ -683,11 +683,29 @@
 	.infos {
 		font-weight: bold;
 		color: rgb(255, 255, 255);
-		font-size: 1.35rem;
+		font-size: 1.15rem;
 		margin-top: -1%;
 	}
 	.mise-container {
-        display: flex;
-        align-items: center;
-    }
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 2px solid grey;
+		border-radius: 15px 15px 15px 15px / 50% 50% 50% 50%;
+		background-color: transparent;
+		width: 15%;
+        height: 10%;
+		margin-top: 2%;
+	}
+	#mise{
+		color: yellow;
+	}
+	.icon_jeton{
+		position: relative;
+		width: 30%;
+		left: -10%;
+	}
+	.texte_mise{
+		margin-left: -10%;
+	}
 </style>

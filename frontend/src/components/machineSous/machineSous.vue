@@ -16,7 +16,7 @@
 		<div class="infos">
 			<a class="jouer"><img src="@/assets/img/MachineSous/btn_CLICK.png" alt="" class="jouer-img"></a>
 			<div class="mise-container">
-			<p>Mise : <span id="mise">{{ mise }}</span></p>
+				<img src="@/assets/img/icon_jeton.svg" alt="jeton" class="icon_jeton"><p>Mise Totale<br><span id="mise">{{ mise }} €</span></p>
 			</div>
 		</div>
 		<div class="roueslot">
@@ -70,7 +70,7 @@
 	
 		// Fonction pour mettre à jour les informations du jeu
 		function mettreAJourInformationsJeu() {
-		document.getElementById('mise').textContent = mise.value;
+		document.getElementById('mise').textContent = mise.value + ' €';
 		userStore.setCredit(credits.value);
 		}
 	
@@ -249,11 +249,26 @@
 		bottom: 2%;
 		font-weight: bold;
 		color: rgb(255, 255, 255);
-		font-size: 1.35rem;
+		font-size: 1.15rem;
 	}
 	.mise-container {
 		display: flex;
 		align-items: center;
+		text-align: center;
+		justify-content: center;
+		border: 2px solid grey;
+		border-radius: 15px 15px 15px 15px / 50% 50% 50% 50%;
+		background-color: transparent;
+		width: 30%;
+	}
+	#mise{
+		color: yellow;
+	}
+	.icon_jeton{
+		position: absolute;
+		width: 6.5%;
+		left: 1px;
+		bottom: 3px;
 	}
 	.jouer-img {
 		position: relative;

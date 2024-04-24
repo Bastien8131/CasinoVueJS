@@ -27,7 +27,7 @@
             <a id="rester-btn" style="display: none;"><img src="@/assets/img/Blackjack/stand.png" alt="STAND" class="bouton-img"></a>
             <a id="donner-btn"><img src="@/assets/img/Blackjack/deal.png" alt="DEAL" class="bouton-img"></a>
             <div class="mise-container">
-                <p>Mise : <span id="mise">0</span></p>
+				<img src="@/assets/img/icon_jeton.svg" alt="jeton" class="icon_jeton"><div class="texte_mise">Mise Totale<br><div id="mise">{{ mise }} €</div></div>
             </div>
         </div>
     </div>
@@ -167,7 +167,7 @@
                 document.getElementById('score-croupier').textContent = calculerValeurMain(mainCroupier.value, montrerCartesCachees);
             }
 
-            document.getElementById('mise').textContent = mise.value;
+            document.getElementById('mise').textContent = mise.value + ' €';
 
             userStore.setCredit(credits.value);
         }
@@ -510,15 +510,33 @@
         bottom: 2%;
         font-weight: bold;
         color: rgb(255, 255, 255);
-        font-size: 1.35rem;
+        font-size: 1.15rem;
     }
     .bouton-img {
         width: 70%;
         height: auto;
         padding: 1%;
     }
-    .mise-container {
-        display: flex;
-        align-items: center;
-    }
+	.mise-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 2px solid grey;
+		border-radius: 15px 15px 15px 15px / 50% 50% 50% 50%;
+		background-color: transparent;
+		width: 15%;
+        height: 10%;
+		margin-top: 7%;
+	}
+	#mise{
+		color: yellow;
+	}
+	.icon_jeton{
+		position: relative;
+		width: 30%;
+		left: -10%;
+	}
+	.texte_mise{
+		margin-left: -10%;
+	}
 </style> 

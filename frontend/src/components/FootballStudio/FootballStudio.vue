@@ -21,7 +21,7 @@
 		</div>
 		<div class="col-md-7 infos text-center d-flex justify-content-center">
             <div class="mise-container">
-                <p>Mise : <span id="mise">0</span></p>
+				<img src="@/assets/img/icon_jeton.svg" alt="jeton" class="icon_jeton"><p>Mise Totale<br><span id="mise">{{ mise }} €</span></p>
             </div>
 		</div>
 		<div class="choix">
@@ -69,7 +69,7 @@
 		bottom: 2%;
 		font-weight: bold;
 		color: rgb(255, 255, 255);
-		font-size: 1.35rem;
+		font-size: 1.15rem;
 	}
 	.carte-locaux, .carte-visiteurs {
 		position: absolute;
@@ -123,9 +123,24 @@
 		cursor: pointer;
 	}
 	.mise-container {
-        display: flex;
-        align-items: center;
-    }
+		display: flex;
+		align-items: center;
+		text-align: center;
+		justify-content: center;
+		border: 2px solid grey;
+		border-radius: 15px 15px 15px 15px / 50% 50% 50% 50%;
+		background-color: transparent;
+		width: 160%;
+	}
+	#mise{
+		color: yellow;
+	}
+	.icon_jeton{
+		position: absolute;
+		width: 40%;
+		left: 1px;
+		bottom: -3px;
+	}
 </style>
 
 <script setup>
@@ -350,7 +365,7 @@
 
 		// Fonction pour mettre à jour les informations du jeu
 		function mettreAJourInformationsJeu() {
-			document.getElementById('mise').textContent = mise.value;
+			document.getElementById('mise').textContent = mise.value + ' €';
 
 			userStore.setCredit(credits.value);
 		}
