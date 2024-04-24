@@ -39,14 +39,7 @@
         0% { transform: translateY(100vh); }
         100% { transform: translateY(-200vh); }
     }
-    .ballons-img{
-        position: absolute;
-        display: none;
-        z-index: 9999;
-        transform: translateX(0);
-        animation: monter 10s linear forwards;
-    }
-    .pauvre-img{
+    .ballons-img,.pauvre-img{
         position: absolute;
         display: none;
         z-index: 9999;
