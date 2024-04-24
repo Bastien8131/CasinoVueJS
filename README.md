@@ -148,3 +148,7 @@ Le frontend de l'application est situé dans le répertoire `frontend` et inclut
 
 Ces librairies contribuent significativement au développement et à l'opération de l'application, assurant une performance efficace et évolutive.
 
+## Base de donnée
+
+Pour ce projet, nous avons utilisé un serveur distant pour y stocker la base de données. Pour des raisons de sécurité, je peux pas fournir ici les logins d'identification En revanche, j'ai mis à disposition à la racine du projet, le fichier SQL de la base de données.
+
